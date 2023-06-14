@@ -1,5 +1,6 @@
 import numpy as np
 import os
+import argparse
 
 def fileLen(filename):
     with open(filename) as f:
@@ -8,15 +9,19 @@ def fileLen(filename):
     return (i+1)
 
 def getAtomsTimes(filename):
+    bool2 = False
     with open(filename) as f:
         for i, l in enumerate(f):
-            if i == 0:
+            if i == 3:
                 nA = int(l)
             if i == 1:
-                fTime = int(l.split()[-1])
-            if i != 1 and l.split()[0] == 'Atoms.':
+                fTime = int(l)
+            if bool2 == True:
                 dTime = int(l.split()[-1]) - fTime
-                return nA, fTime, dTime
+                return nA, fTime, dTime 
+            if i != 0 and len(l.split()) > 1:
+                if l.split()[1] == 'TIMESTEP':
+                    bool2 = True
 
 def autocorrFFT(x):
   N = len(x)
@@ -44,9 +49,9 @@ def build_Arr(filename, nA, npArr, npDelts):
     with open(filename) as f:
         c = -1
         for i, l in enumerate(f):
-            if i % (nA+2) == 0:
+            if i % (nA+9) == 0:
                 c += 1
-            elif i % (nA+2) == 1:
+            elif i % (nA+9) < 9:
                 pass
             else:
                 txyz = l.split()
@@ -69,9 +74,9 @@ def build_Arr(filename, nA, npArr, npDelts):
     with open(filename) as f:
         c = -1
         for i, l in enumerate(f):
-            if i % (nA+2) == 0:
+            if i % (nA+9) == 0:
                 c += 1
-            elif i % (nA+2) == 1:
+            elif i % (nA+9) < 9:
                 pass
             else:
                 txyz = l.split()
@@ -102,14 +107,20 @@ def getMSD(fname):
 
 def main():
     path = os.getcwd()
-    for _,dirs,_ in os.walk(os.getcwd()):
-        for dir in dirs:
-            for root,_,files in os.walk(dir):
-                for file in files:
-                    if file.endswith(".xyz"):
-                        f = os.path.join(path, root)
-                        f = os.path.join(f, file)
-                        getMSD(fname=f)
+    # for _,dirs,_ in os.walk(os.getcwd()):
+    #     for dir in dirs:
+    #         for root,_,files in os.walk(dir):
+    #             for file in files:
+    #                 if file.endswith(".xyz"):
+    #                     f = os.path.join(path, root)
+    #                     f = os.path.join(f, file)
+                        # getMSD(fname=f)
+    parser = argparse.ArgumentParser(description='LAMMPS basic data tool')
+    parser.add_argument('f')
+    args = parser.parse_args()
+    file = args.f
+
+    getMSD(fname=file)
      
 
 if __name__ == "__main__":

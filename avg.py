@@ -1,6 +1,7 @@
 import pandas as pd
 import argparse
 import os
+import sys
 
 def fileLen(filename):
     with open(filename) as f:
@@ -9,18 +10,20 @@ def fileLen(filename):
     return (i+1)
 
 def getStart(s, filename):
+    starts = []
     with open(filename, 'r') as f:
         for i, l in enumerate(f):
             if s in l:
-                return (i+1)
-    return -1
+                starts.append(i+1)
+    return starts
 
 def getEnd(s, filename):
+    ends = []
     with open(filename, 'r') as f:
         for i, l in enumerate(f):
             if s in l:
-                return (i)
-    return -1
+                ends.append(i)
+    return ends
 
 def getFiles(ending):
     fs = []
@@ -35,24 +38,63 @@ def getFiles(ending):
 def main():
     parser = argparse.ArgumentParser(description='LAMMPS basic data tool')
     parser.add_argument('-t', type=int, nargs='?', default=0)
-    parser.add_argument('endings')
-    parser.add_argument('x')
-    parser.add_argument('y')
+    parser.add_argument('-f', type=str, nargs='?', default="")
+    parser.add_argument('-e', type=str, nargs='?', default="")
+    parser.add_argument('--labels', action="extend", nargs='+', type=str)
 
     args = parser.parse_args()
 
-    ends = args.endings
-    x_label = args.x
-    y_label = args.y
+    ends = args.e
+    data_file = args.f
+    labels = args.labels
     transientNum = args.t
 
+    if ends == "" and data_file == "":
+        sys.exit("Must pass a file through `-f file` or list of endings in subdirectories through `-e ending`")
+    
+    if labels == "":
+        sys.exit("Must pass a list of labels through `--labels label_1 label_2`")
 
-    files = getFiles(ending=ends)
     avgs = []
-    for f in files:
-        filelength = fileLen(filename=f)
-        startline = (getStart(s='Per MPI rank memory allocation', filename=f) + transientNum)
-        endline = getEnd(s='Loop time of', filename=f)
+
+    if ends != "":
+        files = getFiles(ending=ends)
+        for f in files:
+            filelength = fileLen(filename=f)
+            tmpS = getStart(s='Per MPI rank memory allocation', filename=f)
+            startlines = [x+transientNum for x in tmpS]
+
+            endlines = getEnd(s='Loop time of', filename=f)
+
+            if len(startlines) == 0 or len(endlines) == 0 or len(startlines) != len(endlines):
+                return 'Invalid or not log file'
+
+            srows = []
+            for iter in range(len(startlines)):
+                if iter == 0:
+                    srows += [i for i in range(0,startlines[iter])]
+                else:
+                    srows += [i for i in range(endlines[iter-1],startlines[iter])]
+                if iter == len(startlines)-1:    
+                    srows += [i for i in range(endlines[iter],filelength)]
+                else:
+                    srows += [i for i in range(endlines[iter],startlines[iter+1])]
+
+            if transientNum > 0:
+                srows.remove(tmpS[0])
+
+            df = pd.read_table(f, delim_whitespace=True, skiprows=srows)
+
+            tmp_avgs = []
+            for l in labels:
+                tmp_avgs.append(df.loc[:,l].mean())
+            avgs.append(tmp_avgs)
+    
+    else:
+        filelength = fileLen(filename=data_file)
+        tmpS = getStart(s='Per MPI rank memory allocation', filename=data_file)
+        startline = (tmpS + transientNum)
+        endline = getEnd(s='Loop time of', filename=data_file)
 
         if startline == -1:
             return 'Not Log File'
@@ -61,13 +103,23 @@ def main():
             return 'Not Log File'
 
         srows = [i for i in range(0,startline)]+[i for i in range(endline,filelength)]
+        if transientNum > 0:
+            srows.remove(tmpS)
 
-        df = pd.read_table(f, delim_whitespace=True, skiprows=srows)
+        df = pd.read_table(data_file, delim_whitespace=True, skiprows=srows)
 
-        avgs.append((df.loc[:,x_label].mean(), df.loc[:,y_label].mean()))
+        tmp_avgs = []
+        for l in labels:
+            tmp_avgs.append(df.loc[:,l].mean())
+        avgs.append(tmp_avgs)
 
     avgs.sort(key=lambda x: x[0])
 
+    s = ""
+    for l in labels:
+        s += str(l)+"\t"
+    print(s)
+    
     for x in avgs:
         s = ""
         for y in x:
@@ -76,4 +128,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

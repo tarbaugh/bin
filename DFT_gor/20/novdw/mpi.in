@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#BSUB -q exx96
+#BSUB -o out
+#BSUB -e err
+#BSUB -J equil
+#BSUB -n 8
+
+export GPUIDX=0
+
+export PATH=/share/apps/CENTOS7/openmpi/4.0.4/bin:$PATH
+export LD_LIBRARY_PATH=/share/apps/CENTOS7/openmpi/4.0.4/lib:$LD_LIBRARY_PATH
+
+mpirun -np 8 /zfshomes/tarbaugh/downloads/lammps-dftd2/src/lmp_g++_openmpi \
+	-in in.lmp

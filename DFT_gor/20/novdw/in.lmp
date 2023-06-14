@@ -1,0 +1,73 @@
+units			metal
+boundary 		p p p
+atom_style		atomic
+
+read_data		data
+mass			1 72.63 
+mass			2 127.603
+
+velocity		all create 1150 1150 mom yes rot yes dist gaussian
+
+pair_style		mlip mlip.ini
+pair_coeff		* * mlip
+
+thermo_style		custom step temp pe ke etotal press density
+thermo			100
+
+timestep		0.001
+
+log			1150.log
+fix			1 all nvt temp 1150 1150 0.1
+run			500000
+dump			1 all custom 1000 vdw_1150.xyz id type x y z fx fy fz
+run			500000
+unfix			1
+undump			1
+
+log			833.log
+fix			2 all nvt temp 833.15 833.15 0.1
+run			500000
+dump			2 all custom 1000 vdw_833.xyz id type x y z fx fy fz
+run			500000
+unfix			2
+undump			2
+
+log			796.log
+fix			3 all nvt temp 796 796 0.1
+run			500000
+dump			3 all custom 1000 vdw_796.xyz id type x y z fx fy fz
+run			500000
+unfix			3
+undump			3
+
+log			685.log
+fix			4 all nvt temp 685 685 0.1
+run			500000
+dump			4 all custom 1000 vdw_685.xyz id type x y z fx fy fz
+run			500000
+unfix			4
+undump			4
+
+log			653.log
+fix			5 all nvt temp 653 653 0.1
+run			500000
+dump			5 all custom 1000 vdw_653.xyz id type x y z fx fy fz
+run			500000
+unfix			5
+undump			5
+
+log			592.log
+fix			6 all nvt temp 592 592 0.1
+run			500000
+dump			6 all custom 1000 vdw_592.xyz id type x y z fx fy fz
+run			500000
+unfix			6
+undump			6
+
+log			359.log
+fix			7 all nvt temp 359.15 359.15 0.1
+run			500000
+dump			7 all custom 1000 vdw_359.xyz id type x y z fx fy fz
+run			500000
+unfix			7
+undump			7

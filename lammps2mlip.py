@@ -96,7 +96,8 @@ for line in lammps_dump_file:
             idx1 += 1
         idx += 1
         if (idx == cfg_size):
-            if (valid_count > 10) and (valid_count % 5) == 0:
+            # if (valid_count > 10) and (valid_count % 1) == 0:
+            if True:
                 arr = arr[arr[:, 0].argsort()]
                 line1 = ''
                 idx = 0
@@ -114,7 +115,7 @@ for line in lammps_dump_file:
                 mlip_configuration_efs.write("    "+str(lattice[0])+"    "+str(lattice[2])+"    "+str(lattice[5])+"\n")
                 mlip_configuration_efs.write(" AtomData:  id type    cartes_x    cartes_y    cartes_z    fx    fy    fz\n")
                 for i in range (0,cfg_size):
-                    mlip_configuration_efs.write("    "+str(int(arr[i][0]))+"    "+str(int(arr[i][1]-1))+"    "+str(arr[i][2])+"    "+str(arr[i][3])+"    "+str(arr[i][4])+"    "+str(arr[i][5])+"    "+str(arr[i][6])+"    "+str(arr[i][7])+"\n")
+                    mlip_configuration_efs.write("    "+str(int(arr[i][0]))+"    "+str(int(arr[i][1]-2))+"    "+str(arr[i][2])+"    "+str(arr[i][3])+"    "+str(arr[i][4])+"    "+str(arr[i][5])+"    "+str(arr[i][6])+"    "+str(arr[i][7])+"\n")
                     energy += epa[i]
                 mlip_configuration_efs.write(" Energy\n")
                 mlip_configuration_efs.write("    "+str(energy)+"\n")

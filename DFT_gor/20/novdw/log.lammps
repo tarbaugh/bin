@@ -1,0 +1,26 @@
+LAMMPS (29 Sep 2021 - Update 2)
+units			metal
+boundary 		p p p
+atom_style		atomic
+
+read_data		data
+Reading data file ...
+  orthogonal box = (0.0000000 0.0000000 0.0000000) to (19.712220 19.712220 19.712220)
+  2 by 2 by 2 MPI processor grid
+  reading atoms ...
+  216 atoms
+  read_data CPU = 0.059 seconds
+mass			1 72.63
+mass			2 127.603
+
+velocity		all create 1150 1150 mom yes rot yes dist gaussian
+
+pair_style		mlip mlip.ini
+pair_coeff		* * mlip
+
+thermo_style		custom step temp pe ke etotal press density
+thermo			100
+
+timestep		0.001
+
+log			1150.log

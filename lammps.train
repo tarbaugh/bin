@@ -1,0 +1,237 @@
+units			metal
+boundary		p p p
+atom_style		atomic
+
+read_data		otf_input
+replicate       2 2 2
+
+mass			1 72.63 
+mass			2 127.603
+
+pair_style		mlip mlip.ini
+pair_coeff		* * mlip
+
+thermo_style		custom step temp pe ke etotal press density
+
+thermo			5000
+timestep		0.001
+velocity		all create 900 900 mom yes rot yes dist gaussian
+
+fix			    997 all nvt temp 900 900 0.1
+run			    1000000
+dump			1 all custom 1000 md.xyz id type x y z fx fy fz
+unfix           997
+
+fix			1 all nvt/sllod temp 900.0 890.0 0.1
+fix			2 all deform 1 x scale 0.9996240976801635 y scale 0.9996240976801635 z scale 0.9996240976801635 remap v
+run			200000
+unfix			1
+unfix			2
+write_restart	890.restart
+
+fix			3 all nvt/sllod temp 890.0 880.0 0.1
+fix			4 all deform 1 x scale 0.9996965751113618 y scale 0.9996965751113618 z scale 0.9996965751113618 remap v
+run			200000
+unfix			3
+unfix			4
+write_restart	880.restart
+
+fix			5 all nvt/sllod temp 880.0 870.0 0.1
+fix			6 all deform 1 x scale 0.9996922624960557 y scale 0.9996922624960557 z scale 0.9996922624960557 remap v
+run			200000
+unfix			5
+unfix			6
+write_restart	870.restart
+
+fix			7 all nvt/sllod temp 870.0 860.0 0.1
+fix			8 all deform 1 x scale 0.9996847597969784 y scale 0.9996847597969784 z scale 0.9996847597969784 remap v
+run			200000
+unfix			7
+unfix			8
+write_restart	860.restart
+
+fix			9 all nvt/sllod temp 860.0 850.0 0.1
+fix			10 all deform 1 x scale 0.9996770035290453 y scale 0.9996770035290453 z scale 0.9996770035290453 remap v
+run			200000
+unfix			9
+unfix			10
+write_restart	850.restart
+
+fix			11 all nvt/sllod temp 850.0 840.0 0.1
+fix			12 all deform 1 x scale 0.9996587485199714 y scale 0.9996587485199714 z scale 0.9996587485199714 remap v
+run			200000
+unfix			11
+unfix			12
+write_restart	840.restart
+
+fix			13 all nvt/sllod temp 840.0 830.0 0.1
+fix			14 all deform 1 x scale 0.9997072498369952 y scale 0.9997072498369952 z scale 0.9997072498369952 remap v
+run			200000
+unfix			13
+unfix			14
+write_restart	830.restart
+
+fix			15 all nvt/sllod temp 830.0 820.0 0.1
+fix			16 all deform 1 x scale 0.9997843091277611 y scale 0.9997843091277611 z scale 0.9997843091277611 remap v
+run			200000
+unfix			15
+unfix			16
+write_restart	820.restart
+
+fix			17 all nvt/sllod temp 820.0 810.0 0.1
+fix			18 all deform 1 x scale 0.9998041125551287 y scale 0.9998041125551287 z scale 0.9998041125551287 remap v
+run			200000
+unfix			17
+unfix			18
+write_restart	810.restart
+
+fix			19 all nvt/sllod temp 810.0 800.0 0.1
+fix			20 all deform 1 x scale 0.999837943891351 y scale 0.999837943891351 z scale 0.999837943891351 remap v
+run			200000
+unfix			19
+unfix			20
+write_restart	800.restart
+
+fix			21 all nvt/sllod temp 800.0 790.0 0.1
+fix			22 all deform 1 x scale 0.9998660254236406 y scale 0.9998660254236406 z scale 0.9998660254236406 remap v
+run			200000
+unfix			21
+unfix			22
+write_restart	790.restart
+
+fix			23 all nvt/sllod temp 790.0 780.0 0.1
+fix			24 all deform 1 x scale 0.9999176674749704 y scale 0.9999176674749704 z scale 0.9999176674749704 remap v
+run			200000
+unfix			23
+unfix			24
+write_restart	780.restart
+
+fix			25 all nvt/sllod temp 780.0 770.0 0.1
+fix			26 all deform 1 x scale 0.9998868343042367 y scale 0.9998868343042367 z scale 0.9998868343042367 remap v
+run			200000
+unfix			25
+unfix			26
+write_restart	770.restart
+
+fix			27 all nvt/sllod temp 770.0 760.0 0.1
+fix			28 all deform 1 x scale 0.9999616519224072 y scale 0.9999616519224072 z scale 0.9999616519224072 remap v
+run			200000
+unfix			27
+unfix			28
+write_restart	760.restart
+
+fix			29 all nvt/sllod temp 760.0 750.0 0.1
+fix			30 all deform 1 x scale 1.000165091409317 y scale 1.000165091409317 z scale 1.000165091409317 remap v
+run			200000
+unfix			29
+unfix			30
+write_restart	750.restart
+
+fix			31 all nvt/sllod temp 750.0 740.0 0.1
+fix			32 all deform 1 x scale 1.00022434298808 y scale 1.00022434298808 z scale 1.00022434298808 remap v
+run			200000
+unfix			31
+unfix			32
+write_restart	740.restart
+
+fix			33 all nvt/sllod temp 740.0 730.0 0.1
+fix			34 all deform 1 x scale 1.000367342373462 y scale 1.000367342373462 z scale 1.000367342373462 remap v
+run			200000
+unfix			33
+unfix			34
+write_restart	730.restart
+
+fix			35 all nvt/sllod temp 730.0 720.0 0.1
+fix			36 all deform 1 x scale 1.0005261091134032 y scale 1.0005261091134032 z scale 1.0005261091134032 remap v
+run			200000
+unfix			35
+unfix			36
+write_restart	720.restart
+
+fix			37 all nvt/sllod temp 720.0 710.0 0.1
+fix			38 all deform 1 x scale 1.000803068909972 y scale 1.000803068909972 z scale 1.000803068909972 remap v
+run			200000
+unfix			37
+unfix			38
+write_restart	710.restart
+
+fix			39 all nvt/sllod temp 710.0 700.0 0.1
+fix			40 all deform 1 x scale 1.0011346219282227 y scale 1.0011346219282227 z scale 1.0011346219282227 remap v
+run			200000
+unfix			39
+unfix			40
+write_restart	700.restart
+
+fix			41 all nvt/sllod temp 700.0 690.0 0.1
+fix			42 all deform 1 x scale 1.0015615467936805 y scale 1.0015615467936805 z scale 1.0015615467936805 remap v
+run			200000
+unfix			41
+unfix			42
+write_restart	690.restart
+
+fix			43 all nvt/sllod temp 690.0 680.0 0.1
+fix			44 all deform 1 x scale 1.0021459960679313 y scale 1.0021459960679313 z scale 1.0021459960679313 remap v
+run			200000
+unfix			43
+unfix			44
+write_restart	680.restart
+
+fix			45 all nvt/sllod temp 680.0 670.0 0.1
+fix			46 all deform 1 x scale 1.002475491357305 y scale 1.002475491357305 z scale 1.002475491357305 remap v
+run			200000
+unfix			45
+unfix			46
+write_restart	670.restart
+
+fix			47 all nvt/sllod temp 670.0 660.0 0.1
+fix			48 all deform 1 x scale 1.0023646997046471 y scale 1.0023646997046471 z scale 1.0023646997046471 remap v
+run			200000
+unfix			47
+unfix			48
+write_restart	660.restart
+
+fix			49 all nvt/sllod temp 660.0 650.0 0.1
+fix			50 all deform 1 x scale 1.0017792169404203 y scale 1.0017792169404203 z scale 1.0017792169404203 remap v
+run			200000
+unfix			49
+unfix			50
+write_restart	650.restart
+
+fix			51 all nvt/sllod temp 650.0 640.0 0.1
+fix			52 all deform 1 x scale 1.0008251149434444 y scale 1.0008251149434444 z scale 1.0008251149434444 remap v
+run			200000
+unfix			51
+unfix			52
+write_restart	640.restart
+
+fix			53 all nvt/sllod temp 640.0 630.0 0.1
+fix			54 all deform 1 x scale 1.0 y scale 1.0 z scale 1.0 remap v
+run			200000
+unfix			53
+unfix			54
+write_restart	630.restart
+
+fix			55 all nvt/sllod temp 630.0 620.0 0.1
+fix			56 all deform 1 x scale 1.0 y scale 1.0 z scale 1.0 remap v
+run			200000
+unfix			55
+unfix			56
+write_restart	620.restart
+
+fix			57 all nvt/sllod temp 620.0 610.0 0.1
+fix			58 all deform 1 x scale 1.0 y scale 1.0 z scale 1.0 remap v
+run			200000
+unfix			57
+unfix			58
+write_restart	610.restart
+
+fix			59 all nvt/sllod temp 610.0 600.0 0.1
+fix			60 all deform 1 x scale 1.0 y scale 1.0 z scale 1.0 remap v
+run			200000
+unfix			59
+unfix			60
+write_restart	600.restart
+
+fix			998 all nvt/sllod temp 600.0 600.0 0.1
+fix			999 all deform 1 x scale 1.0 y scale 1.0 z scale 1.0 remap v
+run			1000000
