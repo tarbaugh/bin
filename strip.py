@@ -1,7 +1,7 @@
 import numpy as np
 import argparse
 
-parser = argparse.ArgumentParser(description='LAMMPS data extraction tool')
+parser = argparse.ArgumentParser(description='LAMMPS basic data tool')
 parser.add_argument('log', nargs='+')
 
 def fileLen(filename):
@@ -24,7 +24,7 @@ def getEnd(s='Loop time of', filename='', startAt=0):
             if i >= startAt:
                 if s in l:
                     return i
-    return -1
+    return i
 
 def main():
     args = parser.parse_args()
@@ -32,13 +32,16 @@ def main():
 
     logfile = logfiles[0]
     startEnds = getStarts(filename=logfile) # + transientNum
+    print(startEnds)
 
     if len(startEnds) == 0:
-        return 'Not Log File'
+        print('Not Log File')
+        exit(1)
 
     for _, i_check, _ in startEnds:
         if i_check == -1:
-            return 'Log File Error'
+            print('Log File Error')
+            exit(1)
 
     # srows = [i for i in range(0,startline)]+[i for i in range(endline,filelength)]
     # df = pd.read_table(logfile, delim_whitespace=True, skiprows=srows)
@@ -58,6 +61,8 @@ def main():
         i += 1
 
     file_iter = 1
+    jump = df[-1][0]
+    print(jump)
     while file_iter < len(logfiles):
 
         logfile = logfiles[file_iter]
@@ -80,7 +85,10 @@ def main():
                 print("Appended data has different labels:\n", h)
                 break
             s += 1
-            df = np.append(df, np.genfromtxt(logfile, skip_header=s, max_rows=(f-s)), axis=0)
+            tmpdf = np.genfromtxt(logfile, skip_header=s, max_rows=(f-s))
+            print(tmpdf)
+            tmpdf[0][:] += jump
+            df = np.append(df, tmpdf, axis=0)
             i += 1
 
         file_iter += 1
